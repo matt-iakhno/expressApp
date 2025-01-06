@@ -1,0 +1,7 @@
+services:
+  app:
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src:/app/src
+    command: npm run start-watch
