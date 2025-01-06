@@ -1,0 +1,1 @@
+## -in package.json, commands starting with `docker:` are what will ultimately be used when doing local development. Start/start-watch will be used by the actual containers to start the server (in either prod or dev mode).

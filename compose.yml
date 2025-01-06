@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+    image: spotlight:prod
     environment:
       NODE_ENV: production
       PORT: 3000

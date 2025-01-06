@@ -14,11 +14,11 @@ ENV NODE_ENV=$NODE_ENV
 WORKDIR /app
 
 COPY ../package*.json ./
-RUN npm ci
+RUN npm ci --only=production
 
 # check every 30s to ensure this service returns HTTP 200
-# HEALTHCHECK --interval=30s \
-#   CMD node healthCheck.js
+HEALTHCHECK --interval=30s \
+  CMD node healthCheck.js
 
 # copy in the remainder of our source code last
 COPY . .
