@@ -4,12 +4,12 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
       PORT: 3000
     ports:
       - "3000:3000"
     env_file:
-      - .env.production.local
+      - .env.development.local
     volumes:
       - .:/app
       - /app/node_modules

@@ -1,9 +1,5 @@
 const app = require("./server");
-const { port } = require("./config");
-require("dotenv").config();
-
-// const port = process.env.PORT;
-const secret = process.env.SECRET;
+const { port, secret } = require("./config");
 
 const server = app.listen(port, function () {
 	console.log("Webserver is ready on port %s, secret: %s", port, secret);

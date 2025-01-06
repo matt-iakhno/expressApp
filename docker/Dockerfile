@@ -1,6 +1,6 @@
 FROM node:22.12-alpine
 
-# set our default port 
+# set our default port
 ARG PORT=3000
 # compose can override this on build and run
 ENV PORT=$PORT
