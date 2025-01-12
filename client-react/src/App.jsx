@@ -37,7 +37,7 @@ function CurrentTime(props) {
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <h1>Hey!!!!! 👋</h1>
+      <h1>Hey! 👋</h1>
       <CurrentTime api="/api/node/getMongoTime" />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

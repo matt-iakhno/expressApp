@@ -1,0 +1,6 @@
+services:
+  api-node:
+    command:
+      - "npm"
+      - "run"
+      - "test"
