@@ -1,0 +1,37 @@
+services:
+  client-react-vite:
+    image: client-react-vite
+    build:
+      context: ./client-react
+    init: true
+    volumes:
+      - ./client-react/vite.config.js:/usr/src/app/vite.config.js
+    networks:
+      - api-network
+    ports:
+      - 5173:5173
+  client-react-nginx:
+    image: client-react-nginx
+    build:
+      context: ./client-react
+    init: true
+    networks:
+      - api-network
+    ports:
+      - 80:8080
+    restart: unless-stopped
+  api-node:
+    # labels:
+    #   shipyard.route: "/api/node/"
+    #   shipyard.route.rewrite: true
+    image: api-node
+    build:
+      context: ./api-node
+    init: true
+    networks:
+      - api-network
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+networks:
+  api-network:

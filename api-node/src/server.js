@@ -2,15 +2,19 @@
 // you'll see long build times on every code change + build. If done correctly,
 // code changes should be only a few seconds to build locally due to build cache.
 const express = require('express');
+const morgan = require('morgan');
+
 const videoRoutes = require('./routes/videoRoutes');
 
 const dotenv = require('dotenv');
 dotenv.config();
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const secret = process.env.SECRET;
 
 const app = express();
+// setup the logger
+app.use(morgan('tiny'));
 
 // Middleware
 app.use(express.json());

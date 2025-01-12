@@ -1,9 +1,10 @@
 const express = require('express');
-const { getVideoById } = require('../controllers/videos');
+const { getMongoTime, getVideoById } = require('../controllers/videos');
 
 const router = express.Router();
 
-// Define the /getVideo/:id route
+router.get('/getMongoTime', getMongoTime);
+
 router.get('/getVideo/:id', getVideoById);
 
 module.exports = router;

@@ -1,0 +1,53 @@
+services:
+  client-react-vite:
+    image: client-react-vite
+    build:
+      context: client-react
+      dockerfile: Dockerfile.0
+    init: true
+    volumes:
+      - type: bind
+        source: ./client-react/
+        target: /usr/src/app/
+      - type: volume
+        target: /usr/src/app/node_modules
+      - type: bind
+        source: ./client-react/vite.config.js
+        target: /usr/src/app/vite.config.js
+    networks:
+      - app-network
+    ports:
+      - 5173:5173
+  client-react-nginx:
+    image: client-react-nginx
+    build:
+      context: client-react
+      dockerfile: Dockerfile.1
+    init: true
+    networks:
+      - app-network
+    ports:
+      - 80:8080
+    restart: unless-stopped
+  api-node:
+    # labels:
+    #   shipyard.route: "/api/node/"
+    #   shipyard.route.rewrite: true
+    image: api-node
+    build:
+      context: ./api-node
+      target: dev
+    init: true
+    volumes:
+      - type: bind
+        source: ./api-node/
+        target: /usr/src/app/
+      - type: volume
+        target: /usr/src/app/node_modules
+    networks:
+      - app-network
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+networks:
+  app-network:

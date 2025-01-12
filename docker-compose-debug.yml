@@ -1,0 +1,9 @@
+services:
+  api-node:
+    command:
+      - "npm"
+      - "run"
+      - "debug-docker"
+    ports:
+      - 3000:3000
+      - 9229:9229
