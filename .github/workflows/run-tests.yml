@@ -18,8 +18,8 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     env:
-      DEV_COMPOSE_FILE: docker-compose.dev.yml
-      TEST_COMPOSE_FILE: docker-compose.test.yml
+      DEV_COMPOSE_FILE: ${{github.workspace}}/docker-compose.dev.yml
+      TEST_COMPOSE_FILE: ${{github.workspace}}/docker-compose.test.yml
 
     steps:
       - name: Checkout latest code
