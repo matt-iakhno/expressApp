@@ -18,8 +18,8 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     env:
-      DEV_COMPOSE_FILE: api-node/docker-compose.dev.yml
-      TEST_COMPOSE_FILE: api-node/docker-compose.test.yml
+      DEV_COMPOSE_FILE: docker-compose.dev.yml
+      TEST_COMPOSE_FILE: docker-compose.test.yml
 
     steps:
       - name: Checkout latest code
@@ -29,17 +29,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      # Set the working directory to the app path to retreieve logs
+      - name: Set working directory
+        run: echo "Changing directory to repository root"
+        working-directory: /home/runner/work/expressApp
+
       # Run Docker Compose to build and test
       - name: Run tests with Docker Compose
         id: test
         run: |
           docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
         continue-on-error: true
-
-      # Set the working directory to the app path to retreieve logs
-      - name: Set working directory
-        run: echo "Changing directory to repository root"
-        working-directory: /home/runner/work/expressApp
 
       # Extract Jest test summary
       # - name: Extract Jest Test Summary
