@@ -18,8 +18,8 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     env:
-      DEV_COMPOSE_FILE: ${{github.workspace}}/docker-compose.dev.yml
-      TEST_COMPOSE_FILE: ${{github.workspace}}/docker-compose.test.yml
+      DEV_COMPOSE_FILE: docker-compose-dev.yml
+      TEST_COMPOSE_FILE: docker-compose-test.yml
 
     steps:
       - name: Checkout latest code
@@ -37,22 +37,22 @@ jobs:
         continue-on-error: true
 
       # Extract Jest test summary
-      # - name: Extract Jest Test Summary
-      #   id: extract
-      #   if: failure()
-      #   run: |
-      #     mkdir -p logs
-      #     docker logs $(docker ps -aqf "name=api-node") > logs/test-output.log
-      #     grep -A 20 "Test Suites:" logs/test-output.log || echo "No Jest summary found."
-      #     echo "comment=$(grep -A 20 'Test Suites:' logs/test-output.log | sed 's/^/    /')" >> $GITHUB_ENV
+      - name: Extract Jest Test Summary
+        id: extract
+        if: failure()
+        run: |
+          mkdir -p logs
+          docker logs $(docker ps -aqf "name=api-node") > logs/test-output.log
+          grep -A 20 "Test Suites:" logs/test-output.log || echo "No Jest summary found."
+          echo "comment=$(grep -A 20 'Test Suites:' logs/test-output.log | sed 's/^/    /')" >> $GITHUB_ENV
 
-      # # Post results as a comment on the PR
-      # - name: Comment on PR
-      #   uses: marocchino/sticky-pull-request-comment@v2
-      #   if: always() # Always run to report the outcome
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     header: Test Results
-      #     message: |
-      #       # Docker Compose Test Results
-      #       ${{ env.comment || '✅ All tests passed!' }}
+      # Post results as a comment on the PR
+      - name: Comment on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: always() # Always run to report the outcome
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          header: Test Results
+          message: |
+            # Docker Compose Test Results
+            ${{ env.comment || '✅ All tests passed!' }}
