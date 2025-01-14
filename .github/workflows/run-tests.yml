@@ -36,6 +36,23 @@ jobs:
           docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
         continue-on-error: true
 
-      - name: Generate Report
-        run: npx github-actions-ctrf ctrf/ctrf-report.json
-        if: always()
+      # Extract Jest test summary
+      - name: Extract Jest Test Summary
+        id: extract
+        if: failure()
+        run: |
+          mkdir -p logs
+          docker logs $(docker ps -aqf "name=api-node") > logs/test-output.log
+          grep -A 20 "Test Suites:" logs/test-output.log || echo "No Jest summary found."
+          echo "comment=$(grep -A 20 'Test Suites:' logs/test-output.log | sed 's/^/    /')" >> $GITHUB_ENV
+
+      # Post results as a comment on the PR
+      - name: Comment on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: always() # Always run to report the outcome
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          header: Test Results
+          message: |
+            # Docker Compose Test Results
+            ${{ env.comment || '✅ All tests passed!' }}

@@ -23,7 +23,7 @@ jobs:
   build-tag-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout latest code
         uses: actions/checkout@v3
 
       - name: Docker meta
