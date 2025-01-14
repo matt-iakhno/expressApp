@@ -9,7 +9,7 @@ let client;
 
 // Ensure the MongoClient is reused for performance
 async function getMongoClient() {
-  console.log('getMongoClient called');
+  console.log('getMongoClient called!');
   if (!client) {
     client = new MongoClient(MONGODB_URL);
     await client.connect();

@@ -1,0 +1,43 @@
+name: Test Run
+
+on:
+  pull_request:
+    types:
+      - opened # Trigger when a PR is created
+      - synchronize # Trigger when new commits are pushed to the PR
+    # don't rebuild image if someone only edited unrelated files
+    paths-ignore:
+      - "README.md"
+
+# cancel any previously-started, yet still active runs of this workflow on the same branch
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    env:
+      DEV_COMPOSE_FILE: docker-compose-dev.yml
+      TEST_COMPOSE_FILE: docker-compose-test.yml
+
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v4
+
+      # Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Run Docker Compose to build and test
+      - name: Run tests with Docker Compose
+        id: test
+        run: |
+          docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
+
+      - name: Check for CTRF report
+        run: ls -l api-node/ctrf
+
+      - name: Generate Report
+        run: npx github-actions-ctrf api-node/ctrf/ctrf-report.json
+        if: always()
