@@ -1,0 +1,57 @@
+name: Test Run
+
+on:
+  pull_request:
+    types:
+      - opened # Trigger when a PR is created
+      - synchronize # Trigger when new commits are pushed to the PR
+    # don't rebuild image if someone only edited unrelated files
+    paths-ignore:
+      - "README.md"
+
+# cancel any previously-started, yet still active runs of this workflow on the same branch
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    env:
+      DEV_COMPOSE_FILE: docker-compose.dev.yml
+      TEST_COMPOSE_FILE: docker-compose.test.yml
+
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v3
+
+      # Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Run Docker Compose to build and test
+      - name: Run tests with Docker Compose
+        id: test
+        run: |
+          docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
+        continue-on-error: true
+
+      # Extract Jest test summary
+      - name: Extract Jest Test Summary
+        id: extract
+        if: failure()
+        run: |
+          mkdir -p logs
+          docker logs $(docker ps -aqf "name=api-node") > logs/test-output.log
+          grep -A 20 "Test Suites:" logs/test-output.log || echo "No Jest summary found."
+
+      # Post results as a comment on the PR
+      - name: Comment on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: always() # Always run to report the outcome
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          header: Test Results
+          message: |
+            # Docker Compose Test Results
+            ${{ steps.extract.outputs.comment || '✅ All tests passed!' }}

@@ -6,11 +6,13 @@ on:
       - master
     # don't rebuild image if someone only edited unrelated files
     paths-ignore:
-      - "README.md"
+      - ".github/workflows/**"
+      - "!**.md"
   pull_request:
     # don't rebuild image if someone only edited unrelated files
     paths-ignore:
-      - "README.md"
+      - ".github/workflows/**"
+      - "!**.md"
 
 # cancel any previously-started, yet still active runs of this workflow on the same branch
 concurrency:
