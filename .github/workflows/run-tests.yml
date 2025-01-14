@@ -36,6 +36,9 @@ jobs:
           docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
         continue-on-error: true
 
+      - name: Check for CTRF report
+        run: ls -l test/
+
       - name: Generate Report
-        run: npx github-actions-ctrf ctrf/ctrf-report.json
+        run: npx github-actions-ctrf test/ctrf-report.json
         if: always()
