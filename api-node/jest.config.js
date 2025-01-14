@@ -4,8 +4,7 @@ module.exports = async () => {
     // verbose: true,
     reporters: [
       'default',
-      ['jest-ctrf-json-reporter', {}],
-      // '<rootDir>/test/jest-reporter.js'
+      ['jest-ctrf-json-reporter', {}]
     ],
   };
 };
