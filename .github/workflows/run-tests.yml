@@ -34,7 +34,6 @@ jobs:
         id: test
         run: |
           docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
-        continue-on-error: true
 
       - name: Check for CTRF report
         run: ls -l api-node/ctrf
