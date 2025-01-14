@@ -23,16 +23,11 @@ jobs:
 
     steps:
       - name: Checkout latest code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Docker
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-
-      # Set the working directory to the app path to retreieve logs
-      - name: Set working directory
-        run: echo "Changing directory to repository root"
-        working-directory: /home/runner/work/expressApp
 
       # Run Docker Compose to build and test
       - name: Run tests with Docker Compose
