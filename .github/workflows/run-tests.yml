@@ -29,15 +29,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: List files
-        run: ls -R
-
       # Run Docker Compose to build and test
       - name: Run tests with Docker Compose
         id: test
         run: |
           docker compose -f $DEV_COMPOSE_FILE -f $TEST_COMPOSE_FILE run --build api-node
         continue-on-error: true
+
+      # Set the working directory to the app path to retreieve logs
+      - name: Set working directory
+        run: echo "Changing directory to repository root"
+        working-directory: /home/runner/work/expressApp
 
       # Extract Jest test summary
       # - name: Extract Jest Test Summary
