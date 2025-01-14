@@ -46,10 +46,6 @@ jobs:
           grep -A 20 "Test Suites:" logs/test-output.log || echo "No Jest summary found."
           echo "comment=$(grep -A 20 'Test Suites:' logs/test-output.log | sed 's/^/    /')" >> $GITHUB_ENV
 
-      # Debug: List files to verify paths
-      - name: List repository files
-        run: ls -R
-
       # Post results as a comment on the PR
       - name: Comment on PR
         uses: marocchino/sticky-pull-request-comment@v2
