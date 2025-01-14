@@ -29,6 +29,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: List files
+        run: ls -R
+
       # Run Docker Compose to build and test
       - name: Run tests with Docker Compose
         id: test
