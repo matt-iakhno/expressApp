@@ -37,8 +37,8 @@ jobs:
         continue-on-error: true
 
       - name: Check for CTRF report
-        run: ls -l api-node/test
+        run: ls -l api-node/ctrf
 
       - name: Generate Report
-        run: npx github-actions-ctrf api-node/test/ctrf-report.json
+        run: npx github-actions-ctrf api-node/ctrf/ctrf-report.json
         if: always()
